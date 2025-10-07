@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github User Creation Date</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here */
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.querySelector("#github-user-c5696dcc8f202f2b6509786c813157e1");
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const username = document.querySelector("#github-user-c5696dcc8f202f2b6509786c813157e1 input[name='username']").value.trim();
+                const token = new URLSearchParams(window.location.search).get('token') || '';
+                fetch(`https://api.github.com/users/${username}?access_token=${token}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const createdAt = new Date(data.created_at);
+                        document.querySelector("#github-created-at").textContent = createdAt.toISOString().split('T')[0];
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Github User Account Creation Date</h1>
+        <form id="github-user-c5696dcc8f202f2b6509786c813157e1">
+            <label for="username">Enter Github Username:</label>
+            <input type="text" name="username" required>
+            <button type="submit">Get Creation Date</button>
+        </form>
+        <div id="github-created-at"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
